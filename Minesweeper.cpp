@@ -1,4 +1,4 @@
-﻿/*
+/*
 github.com/lmao-code/Sapper
 
 +-------------------------------------------------------------------------------+
@@ -20,6 +20,9 @@ using namespace std;
 
 const int field_x = 10;
 const int field_y = 10;
+const int default_size_x = 10;
+const int default_size_y = 10;
+const int default_complexity = 1;
 
 //English
 const string new_game_en = "New game";
@@ -69,10 +72,8 @@ Output:
 |___|___|___|___|___|___|___|___|___|___|
 |   |   |   |   |   |   |   |   |   |   |
 |___|___|___|___|___|___|___|___|___|___|
-
 * unknown
 @ bomb
-
 */
 
 void output()
@@ -109,7 +110,6 @@ void output()
 	int x6 = x - 1, y6 = y + 1;
 	int x7 = x, y7 = y + 1;
 	int x8 = x + 1, y8 = y + 1;
-
 	if (x1 == -1) x1 = xx - 1;
 	if (x2 == -1) x2 = xx - 1;
 	if (x3 == -1) x3 = xx - 1;
@@ -118,7 +118,6 @@ void output()
 	if (x6 == -1) x6 = xx - 1;
 	if (x7 == -1) x7 = xx - 1;
 	if (x8 == -1) x8 = xx - 1;
-
 	if (x1 == xx) x1 = 0;
 	if (x2 == xx) x2 = 0;
 	if (x3 == xx) x3 = 0;
@@ -127,7 +126,6 @@ void output()
 	if (x6 == xx) x6 = 0;
 	if (x7 == xx) x7 = 0;
 	if (x8 == xx) x8 = 0;
-
 	if (y1 == -1) y1 = yy - 1;
 	if (y2 == -1) y2 = yy - 1;
 	if (y3 == -1) y3 = yy - 1;
@@ -136,7 +134,6 @@ void output()
 	if (y6 == -1) y6 = yy - 1;
 	if (y7 == -1) y7 = yy - 1;
 	if (y8 == -1) y8 = yy - 1;
-
 	if (y1 == yy) y1 = 0;
 	if (y2 == yy) y2 = 0;
 	if (y3 == yy) y3 = 0;
@@ -145,7 +142,6 @@ void output()
 	if (y6 == yy) y6 = 0;
 	if (y7 == yy) y7 = 0;
 	if (y8 == yy) y8 = 0;
-
 	if (life[y1][x1] == '+') ret++;
 	if (life[y2][x2] == '+') ret++;
 	if (life[y3][x3] == '+') ret++;
@@ -154,7 +150,6 @@ void output()
 	if (life[y6][x6] == '+') ret++;
 	if (life[y7][x7] == '+') ret++;
 	if (life[y8][x8] == '+') ret++;
-
 	return ret;
 } */
 
@@ -167,12 +162,47 @@ void rules()
 	cout << "Что бы пометить ячейку, в которой находится бомба, нажмите её правой кнопкой мыши"  << endl;
 }
 
-void game()
+void game(bool fast_start)
 {
 	system("cls");
+	int complexity = 0;
+	int size_x = 0;
+	int sixe_y = 0;
+	
+	if (fast_start)
+	{
+		size_x = default_size_x;
+		size_y = default_size_y;
+		complexity = default_complexity;
+	}
+	else
+	{
+		string user_input = "";
+		cin >> user_input;
+		bool input_correct = false;
+		if (user_input == "1") { ret = 1; input_correct = true; }
+		if (user_input == "2") { ret = 2; input_correct = true; }
+		if (user_input == "3") { ret = 3; input_correct = true; }
+		if (user_input == "f") { ret = 4; input_correct = true; }
+	
+		while (input_correct == false)
+		{
+			system("cls");
+			cout << correct_please_en << endl;
+			cout << "1) " << new_game_en << endl;
+			cout << "2) " << rules_en << endl;
+			cout << "3) " << exit_en << endl;
+			user_input = "";
+			cin >> user_input;
+			if (user_input == "1") { ret = 1; input_correct = true; }
+			if (user_input == "2") { ret = 2; input_correct = true; }
+			if (user_input == "3") { ret = 3; input_correct = true; }
+			if (user_input == "f") { ret = 4; input_correct = true; }
+		}
+	}	
 	string user_input = "";
 	int x, y;
-
+	
 	output();
 
 }
@@ -191,7 +221,8 @@ int menu()
 	if (user_input == "1") { ret = 1; input_correct = true; }
 	if (user_input == "2") { ret = 2; input_correct = true; }
 	if (user_input == "3") { ret = 3; input_correct = true; }
-
+	if (user_input == "f") { ret = 4; input_correct = true; }
+	
 	while (input_correct == false)
 	{
 		system("cls");
@@ -204,6 +235,7 @@ int menu()
 		if (user_input == "1") { ret = 1; input_correct = true; }
 		if (user_input == "2") { ret = 2; input_correct = true; }
 		if (user_input == "3") { ret = 3; input_correct = true; }
+		if (user_input == "f") { ret = 4; input_correct = true; }
 	}
 
 	return ret;
@@ -236,8 +268,9 @@ int main() {
 	int user_select = menu();
 	while (user_select != 3)
 	{
-		if (user_select == 1) game();
-		if (user_select == 2) rules();
+		if (user_select == 1) { game(false); }
+		if (user_select == 2) { rules(); getchar(); }
+		if (user_select == 4) { game(true); }
 		user_select = menu();
 	}
 	system("cls");
